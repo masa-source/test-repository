@@ -1,0 +1,57 @@
+<!-- require  -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+  <th:block th:fragment="progress_chart">
+  <div class="chart-area">
+    <div class="chartjs-size-monitor">
+      <div class="chartjs-size-monitor-expand">
+        <div class="">
+        </div>
+      </div>
+      <div class="chartjs-size-monitor-shrink">
+        <div class="">
+        </div>
+      </div>
+    </div>
+    <canvas id="progressChart" class="chartjs-render-monitor"></canvas>
+  </div>
+<script th:inline="javascript">
+var datasetLabels = [];
+var date = new Date();
+var year = date.getFullYear();
+var month = date.getMonth() + 1;
+for (var i = 0; i < 12; i++) {
+  if (month == 0)  month = month + 12;
+  var label = `${month}月`;
+  if (month == 1) label = `${year}年${label}`;
+  datasetLabels.unshift(label);
+  month--;
+}
+</script>
+</th:block>
+
+<th:block th:fragment="kind_chart">
+<div class="chart-pie pt-4 pb-2">
+  <div class="chartjs-size-monitor">
+    <div class="chartjs-size-monitor-expand">
+      <div class="">
+      </div>
+    </div>
+    <div class="chartjs-size-monitor-shrink">
+      <div class=""></div>
+    </div>
+  </div>
+  <canvas id="kindChart"  class="chartjs-render-monitor"></canvas>
+</div>
+
+</th:block>
+
+</body>
+</html>

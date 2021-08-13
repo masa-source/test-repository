@@ -1,0 +1,100 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="fragments/base :: header"></th:block>
+   <script th:src="@{/js/usertables.js}"></script>
+   <script th:src="@{/js/easytimer.js}" defer></script>
+</head>
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <th:block th:insert="fragments/sidebar :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+
+        <div class="container-fluid">
+
+          <!-- DataTables -->
+          <div class="card shadow my-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">
+               目標一覧
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+
+                <div th:if="${targets.size() == 0}">
+                  該当データがありません
+                </div>
+
+                <table class="table table-bordered"
+                  th:if="${targets.size() > 0}">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>名前</th>
+                      <th>ユーザ名</th>
+                      <th>ボタン</th>
+                      <th>日付</th>
+                      <th>isTOP</th>
+                      <th>parentId</th>
+                                            <th>kind</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="target : ${targets}"
+                      th:object="${target}">
+
+                      <td th:text="*{id}"></td>
+
+                      <td th:text="*{name}"></td>
+
+                      <td th:text="*{siteuser.username}"></td>
+
+                      <td>
+                          <a th:href="@{/edit(kind=target,id=*{id})}"
+                            class="btn btn-primary btn-icon-split">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                          <span class="text">編集</span>
+                        </a>
+                          <a th:href="@{/delete(kind=target,id=*{id})}"
+                          class="btn btn-danger btn-icon-split">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-trash"></i>
+                          </span>
+                          <span class="text">削除</span>
+                        </a>
+                      </td>
+
+                      <td th:text="*{DateTime}"></td>
+
+                      <td th:text="*{isTop}"></td>
+
+                      <td th:text="*{parentId}"></td>
+
+       <td th:text="*{kind}"></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- End of Main -->
+  </div>
+
+  <th:block th:insert="fragments/base :: scripts"></th:block>
+  <script th:src="@{/js/usertables.js}"></script>
+  <script th:src="@{/js/chart.js}"></script>
+</body>
+</html>

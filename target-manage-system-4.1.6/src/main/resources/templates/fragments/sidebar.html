@@ -1,0 +1,99 @@
+<!-- require parentId -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="sidebar">
+  <!-- Sidebar -->
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion d-none d-md-block"
+  id="accordionSidebar">
+  <!-- Sidebar - Brand -->
+  <a class="sidebar-brand d-flex align-items-center justify-content-center"
+  th:href="@{/}">
+  <div class="sidebar-brand-icon rotate-n-15">
+    <i class="fas fa-id-card"></i>
+  </div>
+  <div class="sidebar-brand-text mx-3">
+    管理
+  </div>
+</a>
+<!-- Divider -->
+<hr class="sidebar-divider my-0">
+<!-- Nav Item -->
+<li class="nav-item active">
+  <a class="nav-link" th:href="@{/top}">
+    <i class="fas fa-table"></i>
+    <span>ダッシュボード</span>
+  </a>
+</li>
+<!-- Divider -->
+<hr class="sidebar-divider">
+<div class="sidebar-heading">目標・課題</div>
+<li class="nav-item">
+  <a class="nav-link" th:href="@{/target}">
+    <i class="fas fa-table"></i>
+    <span>目標一覧</span>
+  </a>
+</li>
+
+
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+    <i class="fas fa-fw fa-cog"></i>
+    <span>新規追加</span>
+  </a>
+  <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Type:</h6>
+      <a class="collapse-item" th:href="@{/add(kind=target,__(${parentId!=null?'parentId=${parentId}':','})__)}">目標</a>
+      <a class="collapse-item" th:href="@{/add(kind=task,__(${parentId!=null?'parentId=${parentId}':','})__)}">課題</a>
+            <a class="collapse-item" th:href="@{/add(kind=data,__(${parentId!=null?'parentId=${parentId}':','})__)}">データ</a>
+    </div>
+  </div>
+</li>
+<hr class="sidebar-divider">
+<div class="sidebar-heading">ユーザ関係</div>
+<li class="nav-item">
+  <a class="nav-link" th:href="@{/}">
+    <i class="fas fa-user"></i>
+    <span>ログイン情報</span>
+  </a>
+</li>
+
+
+<!-- ログイン情報の下に、「ユーザ一覧」を追加します -->
+<th:block sec:authorize="hasRole('ADMIN')">
+<li class="nav-item">
+  <a class="nav-link pt-2" th:href="@{/admin/list}">
+    <i class="fas fa-table"></i>
+    <span>ユーザ一覧</span>
+  </a>
+</li>
+</th:block>
+
+<!-- Logout -->
+<li class="nav-item">
+  <a class="nav-link" th:href="@{/logout}">
+    <i class="fas fa-sign-out-alt"></i>
+    <span>ログアウト</span>
+  </a>
+</li>
+
+<!-- Divider -->
+<hr class="sidebar-divider d-none d-md-block">
+
+<!-- Sidebar Toggler (Sidebar) -->
+<div class="text-center d-none d-md-inline">
+  <button class="rounded-circle border-0" id="sidebarToggle">
+  </button>
+</div>
+
+</ul>
+<!-- End of Sidebar -->
+</th:block>
+</body>
+</html>

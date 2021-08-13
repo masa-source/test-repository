@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+ <!-- require target -->
+ <th:block th:fragment="target_progress">
+  <div class="card border-left-info shadow py-2 mt-4">
+    <div class="card-body">
+      <th:block th:insert="fragments/progress :: progress_with_icon(title=目標達成率,value=${@targetDataService.getProgress(target)},iconClass=fa-clipboard-list)"></th:block>
+    </div>
+  </div>
+</th:block>
+
+<!-- require target -->
+<th:block th:fragment="task_progress">
+<div class="card border-left-info shadow py-2 mt-4">
+  <div class="card-body">
+    <th:block th:insert="fragments/progress :: progress_with_icon(title=課題達成率,value=${@targetDataService.getTaskProgress(target)},iconClass=fa-clipboard-list)"></th:block>
+  </div>
+</div>
+</th:block>
+
+<!-- require target -->
+<th:block th:fragment="child_progress">
+<div class="card border-left-info shadow py-2 mt-4">
+  <div class="card-body">
+    <th:block th:insert="fragments/progress :: progress_with_icon(title=子目標の達成率,value=${@targetDataService.getChildProgress(target)},iconClass=fa-clipboard-list)"></th:block>
+  </div>
+</div>
+</th:block>
+
+<!-- require target -->
+<th:block th:fragment="total_progress">
+<div class="card border-left-info shadow py-2 mt-4">
+  <div class="card-body">
+    <th:block th:insert="fragments/progress :: progress_with_icon(title=全体の達成率,value=${@targetDataService.getTotalProgress(target)},iconClass=fa-clipboard-list)"></th:block>
+  </div>
+</div>
+</th:block>
+</body>
+</html>

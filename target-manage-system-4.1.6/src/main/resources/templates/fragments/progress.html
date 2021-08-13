@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+
+  <th:block th:fragment="progress(title)" th:with="value = ${value} ?: ''">
+  <h4 class="small font-weight-bold">
+    <span th:text="${title}"></span>
+    <span class="float-right" th:text="${value != ''?'__(${value})__%':'未設定'}"></span>
+  </h4>
+  <div class="progress mb-4">
+    <div class="progress-bar bg-info" role="progressbar" th:style="${value != ''?'width:__(${value})__%':'width:0%'}" th:aria-valuenow="${value != ''?'__(${value})__':'0'}" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+</th:block>
+
+<th:block th:fragment="progress_with_icon(title, iconClass)"  th:with="value = ${value} ?: ''">
+<div class="row no-gutters align-items-center">
+  <div class="col mr-2">
+    <div class="text-xs font-weight-bold text-info text-uppercase mb-1" th:text="${title}"></div>
+    <div class="row no-gutters align-items-center">
+      <div class="col-auto">
+        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" th:text="${value != ''?'__(${value})__%':'未設定'}"></div>
+      </div>
+      <div class="col">
+        <div class="progress progress-sm mr-2">
+          <div class="progress-bar bg-info" role="progressbar" th:style="${value != ''?'width:__(${value})__%':'width:0%'}" th:aria-valuenow="${value != ''?'__(${value})__':'0'}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <i class="fas fa-2x text-gray-300" th:classappend="${iconClass}"></i>
+  </div>
+</div>
+</th:block>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="alert alert-primary alert-dismissible fade show m-0 mt-4" role="alert" th:if="${target.plannedValue} == null">
+  目標値を設定して下さい。
+</div>
+
+<div class="row">
+  <div class="col-12 col-xl-8">
+    <th:block th:insert="cards/progress_chart :: progress_chart"></th:block>
+
+  </div>
+  <div class="col-12 col-xl-4">
+    <th:block th:insert="cards/kind_chart :: kind_chart"></th:block>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12 col-xl-6">
+    <th:block th:insert="cards/progress_list :: progress_list"></th:block>
+<th:block th:insert="cards/target_table :: target_table"></th:block>
+  </div>
+  <div class="col-12 col-xl-6">
+      <th:block th:insert="cards/task_list :: task_list"></th:block>
+        <th:block th:insert="cards/activity :: activity"></th:block>
+  </div>
+</div>
+
+<script th:src="@{/js/chart.js}"></script>
+<script th:inline="javascript">
+$('form').submit(function(){
+  var scroll_top = Math.round($(window).scrollTop());  //送信時の位置情報を取得
+  $('input.position',this).prop('value',scroll_top);  //隠しフィールドに位置情報を設定
+});
+</script>
+</html>

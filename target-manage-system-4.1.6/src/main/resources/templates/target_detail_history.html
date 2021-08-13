@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="row">
+  <div class="col-12 col-md-6 col-xl-3">
+    <th:block th:insert="cards/value :: daily_value"></th:block>
+  </div>
+  <div class="col-12 col-md-6 col-xl-3">
+    <th:block th:insert="cards/value :: earned_value"></th:block>
+  </div>
+  <div class="col-12 col-md-6 col-xl-3">
+    <th:block th:insert="cards/value :: planned_value"></th:block>
+  </div>
+  <div class="col-12 col-md-6 col-xl-3">
+    <th:block th:insert="cards/progress :: target_progress"></th:block>
+  </div>
+</div>
+<th:block th:insert="cards/data_table :: data_table"></th:block>
+<script th:inline="javascript">
+$('form').submit(function(){
+  var scroll_top = Math.round($(window).scrollTop());  //送信時の位置情報を取得
+  $('input.position',this).prop('value',scroll_top);  //隠しフィールドに位置情報を設定
+});
+</script>
+</html>

@@ -1,0 +1,76 @@
+<!-- require parentId,target.task -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="task_table">
+  <div class="card shadow mt-4">
+    <div class="card-header d-inline-flex align-items-center justify-content-between py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        課題
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <div th:if="${target.task.size() == 0}">
+          該当データがありません
+        </div>
+
+        <table class="table table-borderless" id="task-table"
+        th:if="${target.task.size() > 0}">
+        <tbody>
+          <tr th:each="task : ${target.task}"
+          th:object="${task}">
+          <td>
+              <input type="checkbox" >
+              <label th:text="*{name}"></label>
+            </td>
+            <td th:text="*{taskminutes}"></td>
+            <td>
+              <form th:action="@{/delete}" method="get">
+                <input type="hidden"  name="id" th:value="*{id}">
+                <input type="hidden" name="kind" th:value="*{kind}">
+                <input type="hidden" name="position" class="position" value="1">
+                <button class="btn btn-danger btn-circle btn-sm">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card-footer">
+
+    <form th:action="@{/add/task}" class="row" th:object="${task}" novalidate method="post">
+      <input type="hidden" th:field="*{id}">
+      <input type="hidden" id="target" name="target" th:value="${target.id}">
+      <div class="form-group col-10">
+        <span class="badge badge-danger">必須</span>
+        <label for="name">
+          名前
+        </label>
+        <input type="text" placeholder="課題名を入力して下さい" class="form-control"
+        th:errorclass="is-invalid" th:field="*{name}">
+        <div class="invalid-feedback" th:errors="*{name}">
+        </div>
+      </div>
+      <input type="hidden" name="position" class="position" value="1">
+      <div class="form-group col-2 align-self-end">
+      <button class="btn btn-primary btn-block">
+        <span class="text">保存</span>
+      </button>
+            </div>
+    </form>
+
+  </div>
+</div>
+
+</th:block>
+</body>
+</html>

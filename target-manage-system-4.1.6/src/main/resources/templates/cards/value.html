@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <!-- require target -->
+  <th:block th:fragment="earned_value">
+  <div class="card border-left-primary shadow py-2 mt-4">
+    <div class="card-body">
+      <th:block th:insert="fragments/value :: value_with_icon(title=総実績,value=${@targetDataService.getSum(target)},valueUnit=${target.unit},titleClass=text-primary,iconClass=fa-calendar)"></th:block>
+    </div>
+  </div>
+</th:block>
+
+<!-- require target -->
+<th:block th:fragment="daily_value">
+<div class="card border-left-success shadow py-2 mt-4">
+  <div class="card-body">
+    <th:block th:insert="fragments/value :: value_with_icon(title=今日の実績,value=${@targetDataService.getDailySum(target)},valueUnit=${target.unit},titleClass=text-success,iconClass=fa-dollar-sign)"></th:block>
+  </div>
+</div>
+</th:block>
+
+<!-- require target -->
+<th:block th:fragment="planned_value">
+<div class="card border-left-warning shadow py-2 mt-4">
+  <div class="card-body">
+    <th:block th:insert="fragments/value :: value_with_icon(title=目標の値,value=${target.plannedValue},valueUnit=${target.unit},titleClass=text-warning,iconClass=fa-comments)"></th:block>
+  </div>
+</div>
+</th:block>
+</body>
+</html>

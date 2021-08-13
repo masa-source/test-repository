@@ -1,0 +1,88 @@
+<!-- require targetDataService -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="kind_chart">
+
+  <div class="card shadow mt-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">実行状態</h6>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+      <ul class="nav nav-tabs justify-content-end" id="kindTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="child-target-tab" data-toggle="tab" href="#kindTab" role="tab" aria-controls="kindTab" aria-selected="true" data-dataset="0">子目標</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="task-tab" data-toggle="tab" href="#kindTab" role="tab" aria-controls="kindTab" aria-selected="false" data-dataset="1">課題</a>
+        </li>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="kindTab" role="tabpanel" aria-labelledby="kindTab-tab">
+        <th:block th:insert="fragments/chart:: kind_chart"></th:block>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> 完了済み
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> 実行中
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-warning"></i> 実行待ち
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script th:inline="javascript">
+  var childStateValue = /*[[${@targetDataService.getStateList(target)}]]*/ '';
+  var taskStateValue = /*[[${@targetDataService.getTaskStateList(target)}]]*/ '';
+
+ var labels = ["完了済み", "実行中", "実行待ち"];
+  var backgroundColor = ['#4e73df', '#1cc88a', '#f6c23e'];
+  var hoverBackgroundColor = ['#2e59d9', '#17a673', '#f4b619'];
+  var kindDataSets = [
+    {data: childStateValue , labels : labels, backgroundColor : backgroundColor, hoverBackgroundColor : hoverBackgroundColor},
+    {data: taskStateValue , labels : labels, backgroundColor : backgroundColor, hoverBackgroundColor : hoverBackgroundColor}
+  ];
+
+  for(const value of kindDataSets){
+    var dataSum = 0;
+    for (data of value.data) {
+      dataSum += data;
+    }
+    if (dataSum == 0) {
+      value.data = [1];
+      value.labels = ["未設定"];
+      value.backgroundColor = [];
+      value.hoverBackgroundColor = [];
+    }
+  }
+
+  var selectedIndex = 0;
+
+  $('#kindTab a').click(function (e) {
+    e.preventDefault();
+    selectedIndex = parseInt($(this).attr("data-dataset"),10);
+    myPieChart.data.datasets[0].data = kindDataSets[selectedIndex].data;
+    myPieChart.data.datasets[0].labels = kindDataSets[selectedIndex].labels;
+    myPieChart.data.datasets[0].backgroundColor = kindDataSets[selectedIndex].backgroundColor;
+    myPieChart.data.datasets[0].hoverBackgroundColor = kindDataSets[selectedIndex].hoverBackgroundColor;
+    myPieChart.update();
+  });
+
+  </script>
+</th:block>
+</body>
+</html>

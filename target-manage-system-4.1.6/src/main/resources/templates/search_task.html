@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="card shadow mt-4">
+    <div class="card-header d-inline-flex align-items-center justify-content-between py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        課題
+      </h6>
+    </div>
+    <div class="card-body py-4">
+      <div th:if="${taskList.size() == 0}" class="">
+        該当データがありません
+      </div>
+      <div class="task-list" th:if="${taskList.size() > 0}">
+        <div class="card my-3" th:each="task : ${taskList}" th:object="${task}">
+          <div class="card-body py-4">
+            <div class="d-flex flex-row justify-content-between align-self-center">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="taskCheck" th:value="*{id}" th:id="'taskId_' + *{id}">
+                <label class="form-check-label" th:for="'taskId_' + *{id}" th:text="*{name}"></label>
+            </div>
+            <script th:inline="javascript" th:if="${__(*{isDone})__ == true}">
+            var id = /*[[${task.id}]]*/ '';
+            id = "#taskId_" + id;
+            $(id).prop('checked',true);
+            </script>
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="#">編集</a>
+                  <a class="dropdown-item" href="#">実行</a>
+                  <div class="dropdown-divider"></div>
+                  <form class="dropdown-item" th:action="@{/delete}" method="get">
+                    <input type="hidden"  name="id" th:value="*{id}">
+                    <input type="hidden" name="kind" th:value="*{kind}">
+                    <input type="hidden" name="position" class="position" value="1">
+                    <button class="btn btn-light btn-sm btn-block">
+                      <span class="text-danger">削除</span>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <script th:inline="javascript">
+  $('input[name="taskCheck"]').change(function(){
+   var value = $(this).attr("value");
+   if($(this).prop('checked')){
+    $.ajax({
+     url: '/save/task?id='+ value +'&isDone=true',
+     type: 'PUT'
+   });
+   } else {
+    $.ajax({
+     url: '/save/task?id='+ value +'&isDone=false',
+     type: 'PUT'
+   });
+   }
+  });
+  </script>
+</th:block>
+<script th:inline="javascript">
+$('form').submit(function(){
+  var scroll_top = Math.round($(window).scrollTop());  //送信時の位置情報を取得
+  $('input.position',this).prop('value',scroll_top);  //隠しフィールドに位置情報を設定
+});
+</script>
+</html>

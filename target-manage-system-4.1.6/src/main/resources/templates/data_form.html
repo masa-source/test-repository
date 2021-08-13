@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <th:block th:insert="fragments/sidebar :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <div class="container-fluid">
+          <h5 class="my-3" th:text="${parent.name}"></h5>
+          <!-- DataTales -->
+          <div class="card shadow my-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">
+                データ登録
+              </h6>
+            </div>
+
+            <div class="card-body">
+              <div class="table-responsive">
+
+                <form th:action="@{/add/data}" th:object="${data}" method="post">
+                  <input type="hidden" th:field="*{id}">
+                  <input type="hidden" id="target" name="target" th:value="${target.id}">
+
+                  <div class="form-group">
+                    <label for="value">数値</label>
+                    <input type="number" class="form-control"
+                    th:errorclass="is-invalid" id="value" name="value" th:value="__(${data.value!=null?'${data.value}':'0'})__">
+
+                    <div class="invalid-feedback" th:errors="*{value}">
+                    </div>
+                  </div>
+
+                  <!-- Divider -->
+                  <hr class="sidebar-divider my-4">
+
+                  <button class="btn btn-primary btn-block col-md-4">
+                    <i class="fas fa-edit fa-fw"></i>
+                    <span class="text">保存</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- End of Main -->
+  </div>
+
+  <th:block th:insert="fragments/base :: scripts"></th:block>
+</body>
+</html>

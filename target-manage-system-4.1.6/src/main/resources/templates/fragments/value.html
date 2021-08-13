@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="value_with_icon(title, titleClass, iconClass)" th:with="value = ${value} ?: '', valueUnit = ${valueUnit} ?: ''">
+  <div class="row no-gutters align-items-center">
+    <div class="col mr-2">
+      <div class="text-xs font-weight-bold text-uppercase mb-1" th:classappend="${titleClass}" th:text="${title}"></div>
+        <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${value != ''?'__(${value + '&nbsp;' +valueUnit})__':'未設定'}"></div>
+      </div>
+      <div class="col-auto">
+        <i class="fas fa-2x text-gray-300" th:classappend="${iconClass}"></i>
+      </div>
+    </div>
+</th:block>
+</body>
+</html>
