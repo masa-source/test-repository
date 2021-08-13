@@ -34,6 +34,7 @@ class TargetTest {
 		assertFalse(result1);
 		assertTrue(result2);
 		assertTrue(result3);
+		// test
 
 		System.out.println(target1.getKind().toString());
 	}
