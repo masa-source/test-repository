@@ -1,0 +1,119 @@
+<!-- require parentId,target -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="data_table">
+  <div class="card shadow mt-4">
+    <div class="card-header d-inline-flex align-items-center justify-content-between py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        データ一覧
+      </h6>
+      <a th:href="@{/add(kind=data,__(${parentId!=null?'parentId=${parentId}':','})__)}"
+      class="btn btn-icon-split btn-primary">
+      <span class="text">新規</span>
+
+      <span class="icon">
+        <i class="fas fa-plus"></i>
+      </span>
+    </a>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <div th:if="${target.data.size() == 0}">
+        該当データがありません
+      </div>
+
+      <table class="table table-bordered" id="data-table"
+      th:if="${target.data.size() > 0}">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>数値</th>
+          <th>ボタン</th>
+          <th>日付</th>
+          <th>parent</th>
+          <th>kind</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="data : ${target.data}"
+        th:object="${data}">
+
+        <td th:text="*{id}"></td>
+
+        <td th:text="*{value}"></td>
+
+        <td>
+          <a th:href="@{/edit(kind=data,id=*{id})}"
+          class="btn btn-primary btn-icon-split">
+          <span class="icon text-white-50">
+            <i class="fas fa-trash"></i>
+          </span>
+          <span class="text">編集</span></a>
+
+          <form th:action="@{/delete}" method="get">
+            <input type="hidden"  name="id" th:value="*{id}">
+            <input type="hidden" name="kind" th:value="*{kind}">
+            <input type="hidden" name="position" class="position" value="1">
+            <button class="btn btn-danger btn-circle btn-sm">
+              <i class="fas fa-trash"></i>
+            </button>
+          </form>
+        </td>
+
+        <td th:text="*{dateTime}"></td>
+
+        <td th:text="*{target.name}"></td>
+
+
+        <td th:text="*{kind}"></td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+<div class="card-footer">
+  <form class="row my-2" th:action="@{/add/data}" th:object="${data}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <input type="hidden" id="target" name="target" th:value="${target.id}">
+
+    <div class="form-group col-10 m-0">
+      <input type="number" class="form-control"
+      th:errorclass="is-invalid" id="value" name="value" th:value="__(${data.value!=null?'${data.value}':'0'})__">
+      <div class="invalid-feedback" th:errors="*{value}">
+      </div>
+    </div>
+        <input type="hidden" name="position" class="position" value="1">
+    <div class="form-group col-2 m-0">
+      <button class="btn btn-primary btn-block">
+        <span class="text">保存</span>
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+<script>
+$(function() {
+  $("#data-table").dataTable({
+    // DataTablesを日本語化する
+    language: {
+      url: "/webjars/datatables-plugins/i18n/Japanese.json"
+    },
+    // 各種ボタンを有効化する
+    // dom: "Bfrtip",
+    // buttons: ["excelHtml5", "csvHtml5", "print"]
+
+    // 検索を無効化する
+    searching:false
+  });
+});
+</script>
+</th:block>
+</body>
+</html>

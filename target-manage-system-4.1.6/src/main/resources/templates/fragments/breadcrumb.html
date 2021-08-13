@@ -1,0 +1,20 @@
+<!-- require target -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="breadcrumb">
+  <nav aria-label="breadcrumb" class="mt-4">
+    <ol class="breadcrumb" >
+      <li class="breadcrumb-item" aria-current="page" th:each="route : ${@componentFacade.getRouteTargetList(target)}"  th:object="${route}" th:inline="text">
+        <a th:href="@{/detail(kind=*{kind},id=*{id})}" th:text="*{name}"></a>
+      </li>
+    </ol>
+  </nav>
+</th:block>
+</body>
+</html>

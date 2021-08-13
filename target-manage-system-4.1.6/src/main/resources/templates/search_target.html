@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+          <th:block th:insert="cards/target_table :: target_table"></th:block>
+<script th:inline="javascript">
+$('form').submit(function(){
+  var scroll_top = Math.round($(window).scrollTop());  //送信時の位置情報を取得
+  $('input.position',this).prop('value',scroll_top);  //隠しフィールドに位置情報を設定
+});
+</script>
+</html>

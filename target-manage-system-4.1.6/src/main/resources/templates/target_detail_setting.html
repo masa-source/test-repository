@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="row justify-content-center">
+  <div class="my-4 my-xl-5 col-xl-7">
+    <form th:action="@{/add/target}"  th:object="${target}"  novalidate method="post">
+      <input type="hidden" th:field="*{id}">
+      <input type="hidden" id="parentId" name="parentId" th:value="${parent.id}">
+      <input type="hidden" id="siteuser" name="siteuser" th:value="${@siteUserService.getLoginUser().id}">
+      <div class="form-group">
+        <span class="badge badge-danger">必須</span>
+        <label for="name">
+          名前
+        </label>
+        <input type="text" class="form-control"
+        th:errorclass="is-invalid" th:field="*{name}">
+        <div class="invalid-feedback" th:errors="*{name}">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-8">
+          <div class="form-group">
+            <label for="plannedValue">目標値</label>
+            <input type="number" class="form-control"
+            th:errorclass="is-invalid" th:field="*{plannedValue}">
+            <div class="invalid-feedback" th:errors="*{plannedValue}">
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <div class="form-group">
+            <label for="unit">単位</label>
+            <select class="custom-select" id="unit" name="unit">
+              <option value="">未選択</option>
+              <option value="kg">kg</option>
+              <option value="m">m</option>
+              <option value="円">円</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="note">メモ</label>
+        <textarea class="form-control" th:field="*{note}" rows="5"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="d-block" for="startDate">開始日</label>
+            <input type="date" th:field="*{startDate}">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="d-block" for="endDate">終了日</label>
+            <input type="date" th:field="*{endDate}">
+          </div>
+        </div>
+      </div>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-4">
+
+      <div class="form-group row">
+        <div class="col-8">
+          <label for="" class="text-gray-900">データの更新方法</label>
+          <small class="form-text text-muted">データが追加された時の更新方法です。金額などの場合は合計を、身長や体重などの場合は上書きを選択してください。</small>
+        </div>
+        <div class="col-4">
+          <div class="custom-control custom-radio">
+            <input class="custom-control-input" type="radio" name="howToUpdate" id="howToUpdate-sum" value="sum">
+            <label class="custom-control-label" for="howToUpdate-sum">
+              合計
+            </label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input class="custom-control-input" type="radio" name="howToUpdate" id="howToUpdate-update" value="update">
+            <label class="custom-control-label" for="howToUpdate-update">
+              上書き
+            </label>
+          </div>
+        </div>
+      </div>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-4">
+      <div class="form-group row">
+        <div class="col-8">
+          <label for="" class="text-gray-900">達成率を手動で設定する</label>
+          <small class="form-text text-muted">達成率を手動で設定します。データの更新が達成率に反映されなくなるので注意してください。</small>
+        </div>
+        <div class="col-4">
+          <div class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" th:field="*{isManuallyProgress}">
+            <label class="custom-control-label" for="isManuallyProgress1"></label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="manuallyProgress" class="text-gray-900" id="manuallyProgressLabel" th:text="*{'現在の達成率：'+ manuallyProgress + '%'}"></label>
+        <input type="range" class="form-control-range" th:field="*{manuallyProgress}">
+      </div>
+      <!-- Divider -->
+      <hr class="sidebar-divider my-4">
+      <div class="row justify-content-end">
+        <button class="btn btn-primary btn-block col-xl-2">
+          <i class="fas fa-edit fa-fw"></i>
+          <span class="text">保存</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<script th:inline="javascript">
+var $selectedValue = /*[[${target.unit}]]*/ '';
+var $elementReference = document.getElementById( "unit" );
+for( var $index = 0; $index < $elementReference.length; $index++ ){
+  if ($elementReference.options[$index].value == $selectedValue) {
+    $elementReference.options[$index].selected = true;
+  }
+}
+var $howToUpdate = /*[[${target.howToUpdate}]]*/ '';
+$howToUpdate = 'howToUpdate-' + $howToUpdate;
+var $elementRadioBtn = document.getElementById( $howToUpdate );
+$elementRadioBtn.checked = true;
+var $isManuallyProgress = /*[[${target.isManuallyProgress}]]*/ '';
+var $manuallyProgress = /*[[${target.manuallyProgress}]]*/ '';
+var $progress = /*[[${@targetDataService.getProgress(target)} ]]*/'0';
+var $rangeProgressEle = document.getElementById('manuallyProgress');
+var $rangeProgressLabelEle = document.getElementById('manuallyProgressLabel');
+if (!$isManuallyProgress) {
+  $rangeProgressEle.disabled = true;
+  if ($progress != null) {
+    $rangeProgressEle.value = $progress;
+    $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ $progress + '%';
+  } else {
+    $rangeProgressEle.value = 0;
+    $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ '未設定';
+  }
+}
+$('input[name="isManuallyProgress"]').change(function(){
+  if($(this).prop('checked')){
+    $rangeProgressEle.disabled = false;
+    if($manuallyProgress != null){
+      $rangeProgressEle.value = $manuallyProgress;
+      $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ $manuallyProgress + '%';
+    }
+  } else {
+      $rangeProgressEle.disabled = true;
+    if ($progress != null) {
+      $rangeProgressEle.value = $progress;
+      $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ $progress + '%';
+    } else {
+      $rangeProgressEle.value = 0;
+      $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ '未設定';
+    }
+  }
+});
+$('input[name="manuallyProgress"]').on('input', function(){
+  let val = $(this).val();
+  $rangeProgressLabelEle.innerHTML = '現在の達成率：'+ val + '%';
+});
+</script>
+</html>

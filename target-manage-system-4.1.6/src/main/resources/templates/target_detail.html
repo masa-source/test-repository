@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <th:block th:insert="fragments/sidebar :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+      <th:block th:insert="fragments/topbar :: topbar"></th:block>
+        <div class="container-fluid">
+          <th:block th:insert="fragments/breadcrumb :: breadcrumb"></th:block>
+          <div class="row align-items-end">
+            <div class="col">
+              <span class="badge badge-primary mb-2" th:text="${target.kind.name}"></span>
+              <h4 th:text="${target.name}"></h4>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-outline-primary dropdown-toggle" href="#" id="componentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                新規追加
+              </a>
+              <div class="dropdown-menu" aria-labelledby="componentDropdown">
+                <a class="dropdown-item"  th:href="@{/add(kind=target,__(${parentId!=null?'parentId=${parentId}':','})__)}">
+                  子目標
+                </a>
+                <a class="dropdown-item" href="#">
+                  課題
+                </a>
+                <a class="dropdown-item" href="#">
+                  データ
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Nav -->
+          <ul class="nav nav-tabs pt-4" id="targetTabs">
+            <li class="nav-item">
+              <a id="overviewTab" href="#overview" th:data-url="@{/detail/overview(kind=target,id=${target.id})}" class="nav-link">概要</a>
+            </li>
+            <li class="nav-item">
+              <a id="historyTab" href="#history" th:data-url="@{/detail/history(kind=target,id=${target.id})}" class="nav-link">データ</a>
+            </li>
+            <li class="nav-item">
+              <a id="settingTab" href="#setting" th:data-url="@{/detail/setting(kind=target,id=${target.id})}" class="nav-link">設定</a>
+            </li>
+          </ul>
+        </div>
+        <div class="container-fluid">
+          <div class="tab-content mb-4">
+            <div class="tab-pane" id="overview"></div>
+            <div class="tab-pane" id="history"></div>
+            <div class="tab-pane" id="setting"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Main -->
+  </div>
+  <th:block th:insert="fragments/base :: scripts"></th:block>
+  <script th:inline="javascript">
+  $('#targetTabs a').click(function (e) {
+    e.preventDefault();
+    var url = $(this).attr("data-url");
+    var href = this.hash;
+    var pane = $(this);
+    // ajax load from data-url
+    $(href).load(url, function (result) {
+      pane.tab('show');
+    });
+  });
+
+  var page = /*[[${page}]]*/ '';
+if (page != null) {
+  page = "#" + page;
+  var pageTab = page + "Tab";
+  $(pageTab).addClass("active");
+  $(page).addClass("active");
+  // load first tab content
+  $(page).load($('.nav-link.active').attr("data-url"), function (result) {
+  });
+
+}else {
+	$('#overviewTab').addClass("active");
+	$('#overview').addClass("active");
+  // load first tab content
+  $('#overview').load($('.nav-link.active').attr("data-url"), function (result) {
+  });
+}
+
+  window.onload = function(){
+    var value = /*[[${position}]]*/ '0';
+    //ロード時に隠しフィールドから取得した値で位置をスクロール
+    $(window).scrollTop(value);
+  }
+</script>
+</body>
+</html>

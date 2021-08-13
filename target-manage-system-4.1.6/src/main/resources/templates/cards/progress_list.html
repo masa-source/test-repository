@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <!-- require target -->
+  <th:block th:fragment="progress_list">
+  <div class="card shadow mt-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary">達成率</h6>
+    </div>
+    <div class="card-body">
+      <th:block th:insert="fragments/progress :: progress(title=${target.name},value=${@targetDataService.getProgress(target)})"></th:block>
+      <th:block th:insert="fragments/progress :: progress(title=課題,value=${@targetDataService.getTaskProgress(target)})"></th:block>
+      <th:block th:insert="fragments/progress :: progress(title=子目標,value=${@targetDataService.getChildProgress(target)})"></th:block>
+      <th:block th:insert="fragments/progress :: progress(title=全体,value=${@targetDataService.getTotalProgress(target)})"></th:block>
+    </div>
+  </div>
+</th:block>
+</body>
+</html>

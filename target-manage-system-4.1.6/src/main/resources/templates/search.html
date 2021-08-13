@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <th:block th:insert="fragments/base :: header"></th:block>
+</head>
+<body id="page-top">
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+    <th:block th:insert="fragments/sidebar :: sidebar"></th:block>
+
+    <!-- Main -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+      <th:block th:insert="fragments/topbar :: topbar"></th:block>
+        <div class="container-fluid">
+          <div class="row align-items-end">
+            <div class="col">
+              <h4 th:text="${'&quot;'+ searchText + '&quot;の検索結果'}"></h4>
+            </div>
+          </div>
+          <!-- Nav -->
+          <ul class="nav nav-tabs pt-4" id="searchTabs">
+            <li class="nav-item">
+              <a id="targetTab" href="#searchTarget" th:data-url="@{/search/target(searchText=${searchText})}" class="nav-link">目標</a>
+            </li>
+            <li class="nav-item">
+              <a id="taskTab" href="#searchTask" th:data-url="@{/search/task(searchText=${searchText})}" class="nav-link">課題</a>
+            </li>
+          </ul>
+        </div>
+        <div class="container-fluid">
+          <div class="tab-content mb-4">
+            <div class="tab-pane" id="searchTarget"></div>
+            <div class="tab-pane" id="searchTask"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End of Main -->
+  </div>
+  <th:block th:insert="fragments/base :: scripts"></th:block>
+  <script th:inline="javascript">
+  $('#searchTabs a').click(function (e) {
+    e.preventDefault();
+    var url = $(this).attr("data-url");
+    var href = this.hash;
+    var pane = $(this);
+    // ajax load from data-url
+    $(href).load(url, function (result) {
+      pane.tab('show');
+    });
+  });
+
+
+	$('#targetTab').addClass("active");
+	$('#searchTarget').addClass("active");
+  // load first tab content
+  $('#searchTarget').load($('.nav-link.active').attr("data-url"), function (result) {
+  });
+
+  window.onload = function(){
+    var value = /*[[${position}]]*/ '0';
+    //ロード時に隠しフィールドから取得した値で位置をスクロール
+    $(window).scrollTop(value);
+  }
+</script>
+</body>
+</html>

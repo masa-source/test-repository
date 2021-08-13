@@ -1,0 +1,47 @@
+<!-- require targetDataService -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <th:block th:fragment="progress_chart">
+  <div class="card shadow mt-4">
+    <!-- Card Header - Dropdown -->
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <h6 class="m-0 font-weight-bold text-primary" th:text="${'&quot;'+ target.name + '&quot;の進捗'}"></h6>
+      <span th:text="${target.plannedValue!=null?'現在の目標値：__(${target.plannedValue})__':'現在の目標値：未設定'}"></span>
+    </div>
+
+    <!-- Card Body -->
+    <div class="card-body">
+      <ul class="nav nav-tabs justify-content-end" id="progressTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="progress-parcent-tab" data-toggle="tab" href="#progressTab" role="tab" aria-controls="progressTab" aria-selected="true" data-dataset="0">%表記</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="progress-actual-tab" data-toggle="tab" href="#progressTab" role="tab" aria-controls="progressTab" aria-selected="false" data-dataset="1">実際の値</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="progressTab" role="tabpanel" aria-labelledby="progressTab-tab">
+          <th:block th:insert="fragments/chart :: progress_chart"></th:block>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:inline="javascript">
+  var parcentValue = /*[[${@targetDataService.getProgressList(target)}]]*/ '';
+  var actualValue = /*[[${@targetDataService.getActualProgressList(target)}]]*/ '';
+  var unit = /*[[${target.unit}]]*/ '';
+  var progressData = [
+    {data: parcentValue ,label:'達成率',unit:'%'},
+    {data: actualValue ,label:'実績',unit:unit}
+  ];
+  var selectedIndex = 0;
+</script>
+</th:block>
+</body>
+</html>
